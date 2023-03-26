@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+    "renderer",
+    "sc_window",
+    "demos",
+]
