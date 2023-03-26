@@ -14,4 +14,15 @@ Please don't use
 - Ease of development
 ## Documentation
 
-[crates.io](https://crates.io/crates/moai)
+[docs.rs](https://docs.rs/moai/0.0.1/moai/)
+
+## Examples
+
+Examples are located in the `examples` directory
+
+To run an example, download the repository and run
+```sh
+cargo run --example {example_name}
+```
+Replace `{example_name}` with one of the available examples below:
+- testing

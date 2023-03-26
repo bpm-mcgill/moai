@@ -39,17 +39,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "demos"
-version = "0.1.0"
-dependencies = [
- "env_logger",
- "gl",
- "glfw",
- "renderer",
- "sc_window",
-]
-
-[[package]]
 name = "env_logger"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -203,6 +192,34 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 
 [[package]]
+name = "moai"
+version = "0.0.1"
+dependencies = [
+ "env_logger",
+ "gl",
+ "glfw",
+ "moai_core",
+ "moai_window",
+]
+
+[[package]]
+name = "moai_core"
+version = "0.0.1"
+dependencies = [
+ "env_logger",
+ "gl",
+ "log",
+]
+
+[[package]]
+name = "moai_window"
+version = "0.0.1"
+dependencies = [
+ "gl",
+ "glfw",
+]
+
+[[package]]
 name = "objc"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -235,15 +252,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1"
 
 [[package]]
-name = "renderer"
-version = "0.1.0"
-dependencies = [
- "env_logger",
- "gl",
- "log",
-]
-
-[[package]]
 name = "rustix"
 version = "0.36.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -255,14 +263,6 @@ dependencies = [
  "libc",
  "linux-raw-sys",
  "windows-sys",
-]
-
-[[package]]
-name = "sc_window"
-version = "0.1.0"
-dependencies = [
- "gl",
- "glfw",
 ]
 
 [[package]]

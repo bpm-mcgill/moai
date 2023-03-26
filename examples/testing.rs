@@ -1,10 +1,10 @@
 use glfw::{Action, Context, Key};
-use::sc_window::SCWindow;
-use renderer::gl::VBO;
-use renderer::shader::Shader;
+use moai::SCWindow;
+use moai::gl::VBO;
+use moai::shader::Shader;
 
 fn main() {
-    // TODO: In the future, make an Application struct that sets up the scrap project
+    // TODO: In the future, make an Application struct that sets up the moai project
     //       and allows for configuration. Initialize env_logger then
     env_logger::init();
     let mut window = SCWindow::new(String::from("Rust Square"), (3,3), [900,600]);

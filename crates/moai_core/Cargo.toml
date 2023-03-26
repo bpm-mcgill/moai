@@ -1,0 +1,13 @@
+[package]
+name = "moai_core"
+version = "0.0.1"
+edition = "2021"
+description = "Moai Framework Core"
+repository = "https://github.com/bpm-mcgill/moai"
+license = "GPL-3.0+"
+keywords = ["moai"]
+
+[dependencies]
+gl = "0.14.0"
+log = "0.4.0"
+env_logger = "0.10.0"

@@ -1,0 +1,12 @@
+[package]
+name = "moai_window"
+version = "0.0.1"
+edition = "2021"
+description = "Moai Framework Window Manager"
+repository = "https://github.com/bpm-mcgill/moai"
+license = "GPL-3.0+"
+keywords = ["moai"]
+
+[dependencies]
+glfw = "0.51.0"
+gl = "0.14.0"
