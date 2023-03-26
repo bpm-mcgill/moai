@@ -8,7 +8,7 @@
 use std::sync::mpsc::Receiver;
 use glfw::{Context, Window, WindowEvent, Glfw};
 
-pub struct SCWindow {
+pub struct MoaiWindow {
     // User specified
     pub title: String,
     pub ogl_version: (u32, u32),
@@ -24,7 +24,7 @@ pub struct SCWindow {
     //pub is_open: bool
 }
 
-impl SCWindow {
+impl MoaiWindow {
     pub fn new(title: String, ogl_version: (u32, u32), dimensions: [u32; 2]) -> Self{
         let mut glfw = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
         let (mut window, events) = 
@@ -41,7 +41,7 @@ impl SCWindow {
 
         gl::load_with(|s| glfw.get_proc_address_raw(s) as *const _);
 
-        let wind = SCWindow {
+        let wind = MoaiWindow {
             //is_open: !window.should_close(),
 
             title,

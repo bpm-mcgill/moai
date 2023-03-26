@@ -1,5 +1,5 @@
 use glfw::{Action, Context, Key};
-use moai::SCWindow;
+use moai::MoaiWindow;
 use moai::gl::VBO;
 use moai::shader::Shader;
 
@@ -7,7 +7,7 @@ fn main() {
     // TODO: In the future, make an Application struct that sets up the moai project
     //       and allows for configuration. Initialize env_logger then
     env_logger::init();
-    let mut window = SCWindow::new(String::from("Rust Square"), (3,3), [900,600]);
+    let mut window = MoaiWindow::new(String::from("Moai Square"), (3,3), [900,600]);
     unsafe { gl::Viewport(0, 0, 900, 600) };
     unsafe { gl::ClearColor(0.03, 0.01, 0.08, 1.0) };
 
@@ -25,6 +25,9 @@ fn main() {
     // Program will terminate if there's an error (boo hoo too bad)
     let shader = Shader::new().unwrap();
     let vb = VBO::new(&vertices, &indices);
+    shader.bind();
+    let bruh: glam::Vec4  = glam::Vec4::new(1.0,0.6,0.3, 1.0);
+    shader.set_vec4("col", bruh);
 
     // Loop until the user closes the window
     while !window.window.should_close() {

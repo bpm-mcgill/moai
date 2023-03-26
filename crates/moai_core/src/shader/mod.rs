@@ -1,67 +1,29 @@
-use gl::types::*;
+use std::{collections::HashMap, ptr::null};
 use log::{debug, error};
-struct SingleShader {
-    stype: GLenum,
-    content: String
-}
+mod shader_utils;
 
 pub struct Shader{
     sid: u32,
+    // uniform_name: uniform_location
+    uniforms: HashMap<String, i32>
 }
 
 impl Shader{
-
-    // TODO: more testing on the security of this function
-    fn check_status(sid: u32, shader_type: GLenum) -> Result<i32, String> {
-        unsafe{
-            let mut success = 0;
-            gl::GetShaderiv(sid, gl::COMPILE_STATUS, &mut success);
-            if success == 1 {return Ok(success)}
-
-            let mut info: Vec<u8> = Vec::with_capacity(1024);
-            let mut log_len = 0_i32;
-            gl::GetShaderInfoLog(sid, 1024, &mut log_len, info.as_mut_ptr().cast());
-            info.set_len(log_len.try_into().unwrap_or(0));
-            let err_msg = format!("{} SHADER COMPILATION FAILED\n -> {}", shader_type, String::from_utf8_lossy(&info));
-            return Err(err_msg);
-        };
-    }
-
-    fn load_shader(shader_content: &str) -> Vec<SingleShader> {
-        let mut shaders: Vec<SingleShader> = vec![];
-        let splitted: Vec<&str> = shader_content.split('»').collect();
-        for splat in splitted{
-            let splattered = splat.split_once("\n");
-            // The first element is "", this will skip it
-            if splattered.is_none() { continue }
-            // Unwrap is okay because of the check above
-            let splattered = splattered.unwrap();
-
-            // Could implement strum EnumVariants
-            //  - https://docs.rs/strum_macros/0.24.3/strum_macros/derive.EnumString.html
-            if splattered.0 == "Vertex"{
-                shaders.push(SingleShader{stype: gl::VERTEX_SHADER, content: splattered.1.to_string()});
-            }
-            else if splattered.0 == "Fragment"{
-                shaders.push(SingleShader{stype: gl::FRAGMENT_SHADER, content: splattered.1.to_string()});
-            }
-        }
-        shaders
-    }
-
-    pub fn new() -> Result<Self, String>{
+    pub fn new() -> Result<Self, String> {
         // TODO: Handle this properly
         let shader_content = include_str!("../../res/basic.shader");
-        let shaders = Shader::load_shader(shader_content);
+        let shaders = shader_utils::load_shader(shader_content);
+
+        // Create Shader program
         let sid = unsafe {
             let shade_program = gl::CreateProgram();
             for shade in shaders{
                 let shade_id = gl::CreateShader(shade.stype);
                 let c_str_vert = std::ffi::CString::new(shade.content.as_bytes()).unwrap();
-                gl::ShaderSource(shade_id, 1, &c_str_vert.as_ptr(), std::ptr::null());
+                gl::ShaderSource(shade_id, 1, &c_str_vert.as_ptr(), null());
                 gl::CompileShader(shade_id);
 
-                if let Err(err_msg) = Shader::check_status(shade_id, shade.stype) {
+                if let Err(err_msg) = shader_utils::check_status(shade_id, shade.stype) {
                     error!("{}", err_msg);
                     gl::DeleteProgram(shade_program);
                     return Err(err_msg);
@@ -74,15 +36,35 @@ impl Shader{
             gl::LinkProgram(shade_program);
             shade_program
         };
-        debug!("Successfully built shader basic.shader!");
-        Ok(Shader {sid})
-    }
+        let uniforms = shader_utils::get_uniforms(sid);
 
-    pub fn bind(&self){
+        debug!("Successfully built shader basic.shader!");
+        Ok(Shader {sid, uniforms})
+    }
+}
+
+// One liners
+impl Shader {
+    pub fn bind(&self) {
         unsafe {gl::UseProgram(self.sid)}
     }
 
-    pub fn unbind(){
+    pub fn unbind() {
         unsafe {gl::UseProgram(0)}
     }
+
+    fn get_uniform_location(&self, name: &str) -> i32 {
+        *self.uniforms.get(name).unwrap_or(&-1)
+    }
+
+    pub fn set_int(&self, name: &str, value: i32) {unsafe {gl::Uniform1i(self.get_uniform_location(&name), value) };}
+    pub fn set_float(&self, name: &str, value: f32) {unsafe {gl::Uniform1f(self.get_uniform_location(&name), value) };}
+
+    pub fn set_vec4(&self, name: &str, value: glam::Vec4) {unsafe {gl::Uniform4fv(self.get_uniform_location(&name), 1, &value[0]) };}
+    pub fn set_vec3(&self, name: &str, value: glam::Vec3) {unsafe {gl::Uniform3fv(self.get_uniform_location(&name), 1, &value[0]) };}
+    pub fn set_vec2(&self, name: &str, value: glam::Vec2) {unsafe {gl::Uniform2fv(self.get_uniform_location(&name), 1, &value[0]) };}
+
+    pub fn set_mat4(&self, name: &str, value: glam::Mat4) {unsafe {gl::UniformMatrix4fv(self.get_uniform_location(&name), 1, gl::FALSE, &value.x_axis[0]) };}
+    pub fn set_mat3(&self, name: &str, value: glam::Mat3) {unsafe {gl::UniformMatrix3fv(self.get_uniform_location(&name), 1, gl::FALSE, &value.x_axis[0]) };}
+    pub fn set_mat2(&self, name: &str, value: glam::Mat2) {unsafe {gl::UniformMatrix2fv(self.get_uniform_location(&name), 1, gl::FALSE, &value.x_axis[0]) };}
 }
