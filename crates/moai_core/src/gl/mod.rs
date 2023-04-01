@@ -1,18 +1,25 @@
 use gl::types::*;
 use std::os::raw::c_void;
 use std::mem::size_of;
+pub mod texture;
 
 // Rename this since it encapsulates VBOS + EBOS and VAOs
 pub struct VBO {
-    //vbo_id: u32,
+    vbo_id: u32,
     vao_id: u32,
     //ebo_id: u32,
 }
 
+pub struct VertexAttrib {
+    // The number of components of this attribute per vertex
+    pub size: i32,
+    pub vtype: GLenum,
+    pub normal: u8
+}
+
 impl VBO {
     pub fn new(vertices: &[f32], indices: &[i32]) -> Self{
-        //let (vbo_id, vao_id, ebo_id) = unsafe {
-        let vao_id = unsafe {
+        let (vbo_id, vao_id, _ebo_id) = unsafe {
             // Placeholder variables, will be populated with buffer ids
             let (mut vbo, mut vao, mut ebo) = (0, 0, 0);
             
@@ -38,30 +45,45 @@ impl VBO {
                            &indices[0] as *const i32 as *const c_void,
                            gl::STATIC_DRAW);
 
-            // TODO: fix this so layouts can be automatically generated
-            gl::VertexAttribPointer(
-                0,
-                3,
-                gl::FLOAT,
-                gl::FALSE,
-                3 * size_of::<GLfloat>() as GLsizei,
-                std::ptr::null()
-            );
-            gl::EnableVertexAttribArray(0);
-
             // Unbind buffers so they aren't overwritten
             gl::BindBuffer(gl::ARRAY_BUFFER, 0);
             gl::BindVertexArray(0);
 
             // return buffer ids
-            //(vbo, vao, ebo)
-            vao
+            (vbo, vao, ebo)
         };
         return VBO {
-            //vbo_id,
+            vbo_id,
             vao_id,
             //ebo_id
         };
+    }
+
+    pub fn set_layout(&self, elements_per_vertex: i32, layout: &[VertexAttrib]) {
+        unsafe {
+            gl::BindBuffer(gl::ARRAY_BUFFER, self.vbo_id);
+            gl::BindVertexArray(self.vao_id);
+        };
+        let stride = elements_per_vertex * size_of::<GLfloat>() as GLsizei;
+
+        let mut offset = 0;
+        let mut attrib_index = 0;
+        for attrib in layout {
+            unsafe {
+                gl::VertexAttribPointer(
+                    attrib_index,
+                    attrib.size,
+                    attrib.vtype,
+                    attrib.normal,
+                    stride,
+                    (offset * size_of::<GLfloat>() as i32) as *const c_void
+                );
+                gl::EnableVertexAttribArray(attrib_index);
+            }
+            attrib_index += 1;
+            offset += attrib.size;
+        }
+        drop(layout);
     }
 
     pub fn bind(&self) {

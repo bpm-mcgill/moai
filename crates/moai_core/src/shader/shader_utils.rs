@@ -6,7 +6,6 @@ pub struct SingleShader {
     pub content: String
 }
 
-// TODO: more testing on the security of this function
 pub fn check_status(sid: u32, shader_type: GLenum) -> Result<i32, String> {
     unsafe{
         let mut success = 0;

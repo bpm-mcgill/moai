@@ -4,8 +4,7 @@ mod shader_utils;
 
 pub struct Shader{
     sid: u32,
-    // uniform_name: uniform_location
-    uniforms: HashMap<String, i32>
+    uniforms: HashMap<String, i32>,     // name: location
 }
 
 impl Shader{
