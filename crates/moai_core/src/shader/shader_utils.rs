@@ -1,11 +1,23 @@
 use std::{collections::HashMap, ptr::null_mut};
 use gl::types::*;
 
+/// Stores a shader's content and type
 pub struct SingleShader {
     pub stype: GLenum,
     pub content: String
 }
 
+/**
+### Get the compile status of the passed in shader
+</br>
+
+**Arguments**:
+* **sid**: The shader id that will have compile status checked
+* **shader_type**: The type of shader being checked so it can be logged if there's an error
+
+**Returns**:
+* A result enum of either a i32 (success) or a string (error message)
+*/
 pub fn check_status(sid: u32, shader_type: GLenum) -> Result<i32, String> {
     unsafe{
         let mut success = 0;
@@ -22,7 +34,18 @@ pub fn check_status(sid: u32, shader_type: GLenum) -> Result<i32, String> {
         return Err(err_msg);
     };
 }
+/**
+### Parse the .shader file into individual `SingleShader`s.
 
+In a .shader file, a `»` proceded by the shader type *(Fragment, Vertex, ect.)*,<br/>
+marks the start of a new shader of the shader type.
+
+**Arguments**:
+* **shader_content**: A string slice of the shader file contents
+
+**Returns**:
+* A Vec containing SingleShaders that contains the shader data and type
+*/
 pub fn load_shader(shader_content: &str) -> Vec<SingleShader> {
     let mut shaders: Vec<SingleShader> = vec![];
     let splitted: Vec<&str> = shader_content.split('»').collect();
@@ -45,7 +68,17 @@ pub fn load_shader(shader_content: &str) -> Vec<SingleShader> {
     shaders
 }
 
-// Get all of the uniforms (uniform blocks in the future) and populate the uniforms hashmap
+/** 
+### Get uniform locations
+Get all of the uniforms in a shader and populate a hashmap with the uniform <br/>
+name as the key and the uniform location in the shader as the value
+
+**Arguments**:
+* **program_id**: The id of the shader to get the uniforms of
+
+**Returns**:
+* A Hashmap | Uniform Name: Uniform Location
+*/
 pub fn get_uniforms(program_id: u32) -> HashMap<String, i32> {
     let mut uniforms: HashMap<String, i32> = HashMap::new(); // Will store the fetched uniforms
     // Uniform names can't be longer than 128 bytes

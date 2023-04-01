@@ -5,7 +5,6 @@ use moai::gl::{VBO, VertexAttrib};
 use moai::shader::Shader;
 
 // TODO: Style code consistently
-// TODO: Add documentation comments to backend code
 
 fn main() {
     // TODO: In the future, make an Application struct that sets up the moai project
@@ -64,7 +63,7 @@ fn main() {
             shader.bind();
             vb.bind();
             gl::BindTexture(gl::TEXTURE_2D, tid);
-            gl::DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, std::ptr::null());
+            gl::DrawElements(gl::TRIANGLES, vb.indices_size, gl::UNSIGNED_INT, std::ptr::null());
         }
 
         window.window.swap_buffers();

@@ -3,13 +3,23 @@ use std::os::raw::c_void;
 use std::mem::size_of;
 pub mod texture;
 
-// Rename this since it encapsulates VBOS + EBOS and VAOs
+/**
+### Encapsulates VBOS + EBOS and VAOs
+
+The struct has a `new` method used to initalize a new VBO
+with the data provided
+*/
 pub struct VBO {
     vbo_id: u32,
     vao_id: u32,
+
+    // Used for rendering
+    pub indices_size: i32
+
     //ebo_id: u32,
 }
 
+/// Contains specifications for a single vertex attribute
 pub struct VertexAttrib {
     // The number of components of this attribute per vertex
     pub size: i32,
@@ -18,6 +28,18 @@ pub struct VertexAttrib {
 }
 
 impl VBO {
+    /**
+    ### Constructs a new VBO, EBO, and VAO.
+    Method will generate the buffers, populate them with data,</br>
+    then return a VBO struct containing the data
+
+    **Arguments**:
+    * **vertices**: Float array of the object's vertices
+    * **indices**: The type of shader being checked so it can be logged if there's an error
+
+    **Returns**:
+    * A result enum of either a i32 (success) or a string (error message) 
+    */
     pub fn new(vertices: &[f32], indices: &[i32]) -> Self{
         let (vbo_id, vao_id, _ebo_id) = unsafe {
             // Placeholder variables, will be populated with buffer ids
@@ -55,10 +77,20 @@ impl VBO {
         return VBO {
             vbo_id,
             vao_id,
+            indices_size: indices.len() as i32
             //ebo_id
         };
     }
 
+    /**
+    ### Configure the layout for the VBO data
+    Method will configure the layout via vertex attributes so OpenGL</br>
+    knows how to interpret and group the data provided to it.
+
+    **Arguments**:
+    * **elements_per_vertex**: The amount of numbers in a single vertex
+    * **layout**: An array of `VertexAttrib`s that will be in a single vertex
+    */
     pub fn set_layout(&self, elements_per_vertex: i32, layout: &[VertexAttrib]) {
         unsafe {
             gl::BindBuffer(gl::ARRAY_BUFFER, self.vbo_id);

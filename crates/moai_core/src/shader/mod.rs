@@ -2,12 +2,18 @@ use std::{collections::HashMap, ptr::null};
 use log::{debug, error};
 mod shader_utils;
 
+/**
+### Abstracts shader loading, parsing and set up.
+Stores the shader program's id in `sid` and a hashmap of the uniforms'
+locations in `uniforms`.
+*/
 pub struct Shader{
     sid: u32,
     uniforms: HashMap<String, i32>,     // name: location
 }
 
 impl Shader{
+    /// Construct a new Shader object
     pub fn new() -> Result<Self, String> {
         // TODO: Handle this properly
         let shader_content = include_str!("../../res/basic.shader");
