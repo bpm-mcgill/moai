@@ -468,7 +468,7 @@ dependencies = [
 
 [[package]]
 name = "moai"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "env_logger",
  "gl",
@@ -481,7 +481,7 @@ dependencies = [
 
 [[package]]
 name = "moai_core"
-version = "0.0.1"
+version = "0.0.2"
 dependencies = [
  "env_logger",
  "gl",

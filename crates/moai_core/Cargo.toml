@@ -1,6 +1,6 @@
 [package]
 name = "moai_core"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 description = "Moai Framework Core"
 repository = "https://github.com/bpm-mcgill/moai"

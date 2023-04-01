@@ -3,7 +3,7 @@ name = "moai"
 description = "Fast 3d graphics framework"
 repository = "https://github.com/bpm-mcgill/moai"
 license = "GPL-3.0+"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 keywords = ["moai"]
 
@@ -18,7 +18,7 @@ default = [
 ]
 
 [dependencies]
-moai_core = { path="crates/moai_core", version="0.0.1" }
+moai_core = { path="crates/moai_core", version="0.0.2" }
 moai_window = { path="crates/moai_window", optional=true, version="0.0.1" }
 
 [dev-dependencies]
