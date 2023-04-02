@@ -1,0 +1,11 @@
+[package]
+name = "moai_render"
+version = "0.0.1"
+edition = "2021"
+description = "Moai Framework Rendering"
+repository = "https://github.com/bpm-mcgill/moai"
+license = "GPL-3.0+"
+keywords = ["moai"]
+
+[dependencies]
+glam = "0.23.0"

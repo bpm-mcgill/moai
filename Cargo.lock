@@ -476,6 +476,7 @@ dependencies = [
  "glfw",
  "image",
  "moai_core",
+ "moai_render",
  "moai_window",
 ]
 
@@ -487,6 +488,13 @@ dependencies = [
  "gl",
  "glam",
  "log",
+]
+
+[[package]]
+name = "moai_render"
+version = "0.0.1"
+dependencies = [
+ "glam",
 ]
 
 [[package]]

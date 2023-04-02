@@ -17,3 +17,4 @@ Please don't use
 */
 pub use moai_core::*;
 pub use moai_window::*;
+pub use moai_render::*;

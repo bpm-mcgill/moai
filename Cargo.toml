@@ -19,6 +19,7 @@ default = [
 
 [dependencies]
 moai_core = { path="crates/moai_core", version="0.0.2" }
+moai_render = { path="crates/moai_render", version="0.0.1" }
 moai_window = { path="crates/moai_window", optional=true, version="0.0.1" }
 
 [dev-dependencies]

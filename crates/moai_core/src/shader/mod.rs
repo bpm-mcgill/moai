@@ -69,7 +69,7 @@ impl Shader {
     pub fn set_vec3(&self, name: &str, value: glam::Vec3) {unsafe {gl::Uniform3fv(self.get_uniform_location(&name), 1, &value[0]) };}
     pub fn set_vec2(&self, name: &str, value: glam::Vec2) {unsafe {gl::Uniform2fv(self.get_uniform_location(&name), 1, &value[0]) };}
 
-    pub fn set_mat4(&self, name: &str, value: glam::Mat4) {unsafe {gl::UniformMatrix4fv(self.get_uniform_location(&name), 1, gl::FALSE, &value.x_axis[0]) };}
-    pub fn set_mat3(&self, name: &str, value: glam::Mat3) {unsafe {gl::UniformMatrix3fv(self.get_uniform_location(&name), 1, gl::FALSE, &value.x_axis[0]) };}
-    pub fn set_mat2(&self, name: &str, value: glam::Mat2) {unsafe {gl::UniformMatrix2fv(self.get_uniform_location(&name), 1, gl::FALSE, &value.x_axis[0]) };}
+    pub fn set_mat4(&self, name: &str, value: glam::Mat4) {unsafe {gl::UniformMatrix4fv(self.get_uniform_location(&name), 1, gl::FALSE, &value.to_cols_array()[0]) };}
+    pub fn set_mat3(&self, name: &str, value: glam::Mat3) {unsafe {gl::UniformMatrix3fv(self.get_uniform_location(&name), 1, gl::FALSE, &value.to_cols_array()[0]) };}
+    pub fn set_mat2(&self, name: &str, value: glam::Mat2) {unsafe {gl::UniformMatrix2fv(self.get_uniform_location(&name), 1, gl::FALSE, &value.to_cols_array()[0]) };}
 }
