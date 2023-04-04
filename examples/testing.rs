@@ -55,7 +55,7 @@ fn main() {
     shader.set_vec4("col", bruh);
 
     let mut prev_pos = window.window.get_cursor_pos();
-    let mut cam = moai::camera::Camera::new(90.0, 900 as f32 / 600 as f32, 0.1, 100.0);
+    let mut cam = moai::camera::Camera::new(90.0, 900 as f32 / 600 as f32, 0.1, 10000.0);
 
     // Loop until the user closes the window
     while !window.window.should_close() {
