@@ -14,7 +14,9 @@ Please don't use
 - Ease of development
 ## Documentation
 
-[docs.rs](https://docs.rs/moai/0.0.1/moai/)
+[docs.rs](https://docs.rs/moai/latest/moai/)
+
+[crates.io](https://crates.io/crates/moai)
 
 ## Examples
 
