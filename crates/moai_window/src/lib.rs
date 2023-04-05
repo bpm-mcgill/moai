@@ -27,12 +27,14 @@ pub struct MoaiWindow {
 impl MoaiWindow {
     pub fn new(title: String, ogl_version: (u32, u32), dimensions: [u32; 2]) -> Self{
         let mut glfw = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
+
+        // Causes errors on older systems if placed after create_window
+        glfw.window_hint(glfw::WindowHint::ContextVersion(ogl_version.0, ogl_version.1));
+        glfw.window_hint(glfw::WindowHint::OpenGlProfile(glfw::OpenGlProfileHint::Core));
+
         let (mut window, events) = 
             glfw.create_window(dimensions[0], dimensions[1], title.as_str(), glfw::WindowMode::Windowed)
         .expect("Failed to create GLFW window.");
-
-        glfw.window_hint(glfw::WindowHint::ContextVersion(ogl_version.0, ogl_version.1));
-        glfw.window_hint(glfw::WindowHint::OpenGlProfile(glfw::OpenGlProfileHint::Core));
 
         // Make the window's context current
         window.make_current();
