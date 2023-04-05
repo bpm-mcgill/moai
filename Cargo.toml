@@ -29,6 +29,7 @@ glfw = "0.51.0"
 env_logger = "0.10.0"
 glam = "0.23.0"
 image = "0.24.6"
+tobj = "3.2.5"
 
 [[example]]
 name = "testing"

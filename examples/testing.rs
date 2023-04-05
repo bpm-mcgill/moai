@@ -8,35 +8,52 @@ fn main() {
     // TODO: In the future, make an Application struct that sets up the moai project
     //       and allows for configuration. Initialize env_logger then
     env_logger::init();
-    let mut window = MoaiWindow::new(String::from("Moai Square"), (3, 3), [900, 600]);
+    let mut window = MoaiWindow::new(String::from("Moai Demo"), (3, 3), [900, 600]);
     unsafe { gl::Viewport(0, 0, 900, 600) };
     unsafe { gl::ClearColor(0.03, 0.01, 0.08, 1.0) };
+    unsafe { gl::Enable(gl::DEPTH_TEST) };
     window.window.set_cursor_pos_polling(true);
     window.window.set_cursor_mode(glfw::CursorMode::Disabled); // Capture mouse (makes view kinda jittery)
+    
+    let mut vertices = vec![];
+    let mut indices: Vec<i32> = vec![];
 
-    let vertices: [f32; 32] = [
-        // positions       // colors        // texture coords
-         0.5,  0.5, 0.0,   1.0, 0.0, 0.0,   1.0, 1.0, // top right
-         0.5, -0.5, 0.0,   0.0, 1.0, 0.0,   1.0, 0.0, // bottom right
-        -0.5, -0.5, 0.0,   0.0, 0.0, 1.0,   0.0, 0.0, // bottom left
-        -0.5,  0.5, 0.0,   1.0, 1.0, 0.0,   0.0, 1.0, // top left
-    ];
-    let indices = [
-        0, 1, 3, // first Triangle
-        1, 2, 3, // second Triangle
-    ];
+    let (models, materials) = tobj::load_obj("examples/rx7.obj", &tobj::GPU_LOAD_OPTIONS).unwrap();
+    let mut maxv: u32 = 0;
+    for (j, model) in models.iter().enumerate(){
+        let mesh = &model.mesh;
+        if mesh.positions.len() % 3 != 0 {break};
+
+        // Vertex: [PosX, PosY, PosZ, NormX, NormY, NormZ, TexX, TexY, ColX, ColY, ColZ]
+        for (i, pos) in mesh.positions.chunks(3).enumerate(){
+            if mesh.normals.is_empty() && mesh.texcoords.is_empty(){break};
+            vertices.push(pos[0]); // X
+            vertices.push(pos[1]); // Y
+            vertices.push(pos[2]); // Z
+            vertices.push(mesh.normals[i*3]);   // X
+            vertices.push(mesh.normals[i*3+1]); // Y
+            vertices.push(mesh.normals[i*3+2]); // Z
+            vertices.push(mesh.texcoords[i*2]);   // X
+            vertices.push(mesh.texcoords[i*2+1]); // Y
+        }
+        for inde in mesh.indices.iter(){
+            indices.push(*inde as i32+maxv as i32);
+        }
+        maxv = vertices.len() as u32/8 as u32;
+    }
 
     // Program will terminate if there's an error (boo hoo too bad)
     let shader = Shader::new().unwrap();
     let vb = VBO::new(&vertices, &indices);
     vb.set_layout(8, &[
         VertexAttrib { size: 3, vtype: gl::FLOAT, normal: gl::FALSE }, // position
-        VertexAttrib { size: 3, vtype: gl::FLOAT, normal: gl::FALSE }, // color
+        VertexAttrib { size: 3, vtype: gl::FLOAT, normal: gl::TRUE }, // normals
         VertexAttrib { size: 2, vtype: gl::FLOAT, normal: gl::FALSE }, // texture coords
     ]);
 
     // Rust png crate is considerably faster, but it doesn't matter since this
     // is frontend code. The user decides how to parse their own images
+    
     let img = image::open("examples/moai.png")
         .expect("Couldn't open image (bruh)")
         .flipv();
@@ -94,7 +111,7 @@ fn main() {
         }
         cam.update();
 
-        unsafe { gl::Clear(gl::COLOR_BUFFER_BIT) };
+        unsafe { gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT) };
         unsafe {
             shader.bind();
             vb.bind();
