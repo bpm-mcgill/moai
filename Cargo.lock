@@ -501,6 +501,7 @@ dependencies = [
  "gl",
  "glam",
  "log",
+ "tobj",
 ]
 
 [[package]]

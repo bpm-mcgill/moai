@@ -19,9 +19,65 @@ pub struct Primitive{
     material: Option<Material>,
 }
 
+/**
+### Wrapper for .mtl illumination models
+
+Used in materials to decide which shader to render with. Some of the options aren't implemented</br>
+and some will never be implemented. Objects loaded using an illumination model not implemented</br>
+will get a default shader.
+
+---
+</br>
+
+|Variant Name          |Illumination model                                                  |
+|----------------------|--------------------------------------------------------------------|
+|`COL`                 |Color on, Ambient off                                               |
+|`COL_AMB`             |Color on, Ambient on                                                |
+|`HIGHLIGHT`           |Highlight on                                                        |
+|`REFL_RAY`            |Reflection on, Raytrace on                                          |
+|`T_GLASS_REFL_RAY`    |Transparency: Glass on, Reflection: Raytrace on                     |
+|`REFL_FRES_RAY`       |Reflection: Fresnel on, Raytrace on                                 |
+|`T_REFR_RAY`          |Transparency: Refraction on, Reflection: Fresnel off, Raytrace on   |
+|`T_REFR_REFL_FRES_RAY`|Transparency: Refraction on, Reflection: Fresnel on, Raytrace on    |
+|`REFL`                |Reflection: Ray off                                                 |
+|`T_GLASS_REFL`        |Transparency: Glass on, Reflection: Ray off                         |
+|`SHADOW_CAST_INVIS`   |Cast shadows on invisable surfaces                                  |
+http://paulbourke.net/dataformats/mtl/
+*/
+#[allow(non_camel_case_types)]
+pub enum IlluminationModel {
+    COL = 0,
+    COL_AMB = 1,
+    HIGHLIGHT = 2,
+    REFL_RAY = 3,
+    T_GLASS_REFL_RAY = 4,
+    REFL_FRES_RAY = 5,
+    T_REFR_RAY = 6,
+    T_REFR_REFL_FRES_RAY = 7,
+    REFL = 8,
+    T_GLASS_REFL = 9,
+    SHADOW_CAST_INVIS = 10,
+}
+
+struct PBRMaterialData {
+    ambient: [f64; 3],
+    diffuse: [f64; 3],
+    specular: [f64; 3],
+    shininess: f64,
+    optical_density: f64,
+    ambient_texture: u32, // The opengl id for the texture
+    diffuse_texture: u32,
+    normal_texture: u32,
+    shininess_texture: u32,
+    alpha_texture: u32,
+    illumination: Option<IlluminationModel>,
+}
+
 // Will implement uniform buffers in the future
 pub struct Material {
+    name: String,
     shader: i32, // The id for the shader the material uses
+    data: PBRMaterialData,
 }
 
 fn get_layout(mesh: tobj::Mesh) -> (Vec<VertexAttrib>, i32){

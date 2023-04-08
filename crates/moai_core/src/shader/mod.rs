@@ -12,6 +12,7 @@ pub struct Shader{
     uniforms: HashMap<String, i32>,     // name: location
 }
 
+// TODO: make shader pipeline
 impl Shader{
     /// Construct a new Shader object
     pub fn new() -> Result<Self, String> {
