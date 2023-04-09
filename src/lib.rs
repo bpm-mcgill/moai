@@ -12,7 +12,7 @@ Please don't use
 - Ease of development
 ## Documentation
 
-[docs.rs](https://docs.rs/moai/0.0.1/moai/)
+[docs.rs](https://docs.rs/moai/latest/)
 
 */
 pub use moai_core::*;

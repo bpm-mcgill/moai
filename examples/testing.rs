@@ -8,7 +8,7 @@ fn main() {
     // TODO: In the future, make an Application struct that sets up the moai project
     //       and allows for configuration. Initialize env_logger then
     env_logger::init();
-    let mut window = MoaiWindow::new(String::from("Moai Square"), (3, 3), [900, 600]);
+    let mut window = MoaiWindow::new(String::from("Moai Demo"), (3, 3), [900, 600]);
     unsafe { gl::Viewport(0, 0, 900, 600) };
     unsafe { gl::ClearColor(0.03, 0.01, 0.08, 1.0) };
     window.window.set_cursor_pos_polling(true);
@@ -25,6 +25,7 @@ fn main() {
         0, 1, 3, // first Triangle
         1, 2, 3, // second Triangle
     ];
+    let gltf = gltf::import("examples/car.glb");
 
     // Program will terminate if there's an error (boo hoo too bad)
     let shader = Shader::new().unwrap();
