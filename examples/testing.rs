@@ -25,7 +25,6 @@ fn main() {
         0, 1, 3, // first Triangle
         1, 2, 3, // second Triangle
     ];
-    let gltf = gltf::import("examples/car.glb");
 
     // Program will terminate if there's an error (boo hoo too bad)
     let shader = Shader::new().unwrap();

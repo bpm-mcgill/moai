@@ -15,22 +15,22 @@ members = [
 [features]
 default = [
     "moai_window",
+    "moai_gltf"
 ]
 
 [dependencies]
 moai_core = { path="crates/moai_core", version="0.0.2" }
 moai_render = { path="crates/moai_render", version="0.0.1" }
 moai_window = { path="crates/moai_window", optional=true, version="0.0.1" }
+moai_gltf = { path="crates/moai_gltf", optional=true, version="0.0.1" }
 
 [dev-dependencies]
 # Used for the examples
 gl = "0.14.0"
 glfw = "0.51.0"
 env_logger = "0.10.0"
-glam = "0.23.0"
+glam = "0.24.0"
 image = "0.24.6"
-tobj = "3.2.4"
-gltf = "1.1.0"
 
 [[example]]
 name = "testing"

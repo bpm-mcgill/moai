@@ -1,11 +1,11 @@
 [package]
-name = "moai_render"
+name = "moai_gltf"
 version = "0.0.1"
 edition = "2021"
-description = "Moai Framework Rendering"
+description = "Moai Framework GLTF Model Loader"
 repository = "https://github.com/bpm-mcgill/moai"
 license = "GPL-3.0+"
 keywords = ["moai"]
 
 [dependencies]
-glam = "0.24.0"
+gltf = "1.1.0"
